@@ -12,7 +12,7 @@ type Period struct {
 
 var ErrIllegalPeriod = errors.New("period: start before end")
 
-func NewPeriod(start, end time.Time) (*Period, error) {
+func New(start, end time.Time) (*Period, error) {
 	if end.Before(start) {
 		return nil, ErrIllegalPeriod
 	}

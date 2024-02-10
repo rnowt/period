@@ -16,7 +16,7 @@ func check(err error) {
 const layout = "02-01-2006 15:04"
 
 func main() {
-	p, err := period.NewPeriod(
+	p, err := period.New(
 		time.Date(2021, time.January, 1, 0, 0, 0, 0, time.Local),
 		time.Date(2021, time.July, 1, 0, 0, 0, 0, time.Local),
 	)
