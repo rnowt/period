@@ -10,7 +10,10 @@ type Period struct {
 	End   time.Time
 }
 
-var ErrIllegalPeriod = errors.New("period: start before end")
+var (
+	ErrIllegalPeriod = errors.New("period: start before end")
+	ErrNoOverlap     = errors.New("no overlap")
+)
 
 func New(start, end time.Time) (*Period, error) {
 	if end.Before(start) {
@@ -30,7 +33,11 @@ func (p *Period) Overlaps(op *Period) bool {
 	return !p.Start.After(op.End) && !p.End.Before(op.Start)
 }
 
-func (p *Period) Overlap(op *Period) *Period {
+func (p *Period) Overlap(op *Period) (*Period, error) {
+	if !p.Overlaps(op) {
+		return nil, ErrNoOverlap
+	}
+
 	maxStart := p.Start
 	if op.Start.After(p.Start) {
 		maxStart = op.Start
@@ -39,7 +46,8 @@ func (p *Period) Overlap(op *Period) *Period {
 	if op.End.Before(p.End) {
 		minEnd = op.End
 	}
-	return &Period{maxStart, minEnd}
+
+	return &Period{maxStart, minEnd}, nil
 }
 
 func (p *Period) Split(n uint8) []Period {
