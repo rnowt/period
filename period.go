@@ -30,9 +30,16 @@ func (p *Period) Overlaps(op *Period) bool {
 	return !p.Start.After(op.End) && !p.End.Before(op.Start)
 }
 
-// TODO
-func (p *Period) Overlap(op *Period) time.Duration {
-	return 0
+func (p *Period) Overlap(op *Period) *Period {
+	maxStart := p.Start
+	if op.Start.After(p.Start) {
+		maxStart = op.Start
+	}
+	minEnd := p.End
+	if op.End.Before(p.End) {
+		minEnd = op.End
+	}
+	return &Period{maxStart, minEnd}
 }
 
 func (p *Period) Split(n uint8) []Period {
