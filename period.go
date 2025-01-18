@@ -25,7 +25,7 @@ func New(start, end time.Time) (*Period, error) {
 	}, nil
 }
 
-func (p *Period) Contains(dt time.Time) bool {
+func (p *Period) IsWithin(dt time.Time) bool {
 	return !dt.Before(p.Start) && !dt.After(p.End)
 }
 
